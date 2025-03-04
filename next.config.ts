@@ -1,6 +1,11 @@
 import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
+  experimental: {
+    serverActions: {
+      bodySizeLimit: "10mb", // Set limit to 10MB (adjust as needed)
+    },
+  },
   images: {
     // Option A (for Next.js 12+ and 13+): Use 'remotePatterns'
     remotePatterns: [
@@ -10,8 +15,12 @@ const nextConfig: NextConfig = {
         pathname: '/**',
       },
       {
-        protocol:"https",
-        hostname: "img-clerk. com",
+        protocol: "https",
+        hostname: "img-clerk.com",
+      },
+      {
+        protocol: "https",
+        hostname: "eyslrmwmvaubiprgyeqt.supabase.co",
       },
     ],
 

@@ -1,6 +1,5 @@
 import React from 'react'
 import Image from 'next/image'
-import { cn } from "@/lib/utils";
 import { SearchIcon, HomeIcon, UserIcon, Briefcase, MessagesSquare } from 'lucide-react'
 import { Input } from "@/components/ui/input";
 import Link from 'next/link';

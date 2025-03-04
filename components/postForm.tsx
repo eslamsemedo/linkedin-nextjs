@@ -2,9 +2,10 @@
 import { useUser } from "@clerk/nextjs";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Button } from "./ui/button";
-import { ImageIcon, XIcon } from "lucide-react";
-import { HtmlHTMLAttributes, useRef, useState } from "react";
-import { error } from "console";
+import { ArrowBigUp, ImageIcon, XIcon } from "lucide-react";
+import createPostAction from "@/action/createPostAction";
+import { useRef, useState } from "react";
+import Image from "next/image";
 
 export default function PostForm() {
   const { user } = useUser()
@@ -12,28 +13,31 @@ export default function PostForm() {
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [preview, setPreview] = useState<string | null>(null)
 
-  async function handlePostAction(formData: FormData): Promise<void> {
-    const formDataCopy = formData
-    ref.current?.reset()
+  const handlePostAction = async (formData: FormData): Promise<void> => {
+    const formDataCopy = formData;
+    ref.current?.reset();
 
-    if (!formData) {
-      throw new Error("You must provide a post input")
+    const text = formDataCopy.get("postInput") as string;
+
+    if (!text) {
+      throw new Error("You must provide a post input");
     }
 
     setPreview(null);
 
     try {
-      // await createPostAction(formDataCopy)
+      await createPostAction(formDataCopy);
     } catch (error) {
-      console.log(`Error creating post: ${error}`)
+      console.error(`Error creating post: ${error}`);
+
+      // Display toast
     }
-  }
+  };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       setPreview(URL.createObjectURL(file));
-      e.target.value = ""
     }
   };
 
@@ -43,9 +47,8 @@ export default function PostForm() {
         className="p-3 bg-white rounded-lg border"
         ref={ref}
         action={(formData) => {
-          const promise = handlePostAction(formData);
+          handlePostAction(formData);
         }}
-
       >
         <div className="flex items-center space-x-2">
           <Avatar>
@@ -72,16 +75,19 @@ export default function PostForm() {
             onChange={handleImageChange}
 
           />
-          <button type="submit" hidden>
-            Post
-          </button>
+          <Button className="bg-slate-500 rounded-xl h-10" type="submit">
+            <ArrowBigUp />
+          </Button>
         </div>
 
         {/* preview */}
 
         {preview && (
           <div className="mt-2">
-            <img src={preview} alt="Preview" className="w-full object-cover" />
+            <Image src={preview} alt="Preview"
+              width={500}
+              height={500}
+              className="w-full object-cover" />
           </div>
         )}
 
