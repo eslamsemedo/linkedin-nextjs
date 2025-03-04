@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 // const connectionString = process.env.MONGO;
-const connectionString = "mongodb+srv://eslamsemedo:Hi0JzWBRA6ROR8lj@ozonecluster.xtb3u.mongodb.net/?retryWrites=true&w=majority&appName=ozoneCluster";
+const connectionString = `mongodb+srv://${process.env.MONGO_DB_USERNAME}:${process.env.MONGO_DB_PASSWORD}@ozonecluster.xtb3u.mongodb.net/?retryWrites=true&w=majority&appName=ozoneCluster`;
 
 if (!connectionString) {
   throw new Error("Please provide a valid connection string");
